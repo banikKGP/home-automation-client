@@ -26,6 +26,9 @@ export class DashboardComponent implements OnInit {
   editedDevice: any;
   currentDevice: any;
 
+  MAX_VOLUME = 10
+  MIN_VOLUME = 0
+
   constructor(private toastr: ToastrService,
     private appService: AppService,
     private router: Router,
@@ -53,6 +56,10 @@ export class DashboardComponent implements OnInit {
         this.devices.forEach(device => {
           device.icon = "fa " + this.allowedDevicesIconMap.get(device.deviceType)
         });
+      },
+      (err) => {
+        err = err.error
+        this.toastr.error(err.message)
       }
     )
     this.resetNewDeviceData();
@@ -66,9 +73,13 @@ export class DashboardComponent implements OnInit {
 
   toggleDeviceConnection(device) {
     device.isTurnOn = !device.isTurnOn
-    this.appService.updateDevice(device.deviceId, { isTurnOn: device.isTurnOn }).subscribe(
+    this.appService.updateDeviceControl(device.deviceId, { isTurnOn: device.isTurnOn }).subscribe(
       () => {
         console.log('Successfully updated device')
+      },
+      (err) => {
+        err = err.error
+        this.toastr.error(err.message)
       });
   }
 
@@ -84,8 +95,13 @@ export class DashboardComponent implements OnInit {
   }
 
   openControlModal(template: TemplateRef<any>, device) {
-    this.modalRef = this.modalService.show(template);
-    this.currentDevice = device;
+    
+    this.appService.getDeviceControl(device.deviceId).subscribe(
+      (curDevice: any) => {
+        this.currentDevice = curDevice.data
+        this.modalRef = this.modalService.show(template);
+      }
+    )
     // this.allowedDevices.keys()
   }
 
@@ -162,5 +178,45 @@ export class DashboardComponent implements OnInit {
         err = err.error
         this.toastr.error(err.message || 'Some error occured, please try after some time')
       })
+  }
+
+  volumeControl(device, status){
+    if(!device.isTurnOn){
+      this.toastr.info('Please turn on the device')
+    }
+    let currentVolume = device.volume;
+    if(status === 1){
+      if(currentVolume === this.MAX_VOLUME) {
+        return
+      }
+      currentVolume += 1
+    } else if (status === -1){
+      if(currentVolume === this.MIN_VOLUME) {
+        return
+      }
+      currentVolume -= 1
+    } else {
+      currentVolume = 0
+    }
+    this.appService.updateDeviceControl(device.deviceId, { volume: currentVolume }).subscribe(
+      () => {
+        device.volume = currentVolume;
+      },
+      (err) => {
+        err = err.error
+        this.toastr.error(err.message)
+      });
+  }
+
+  changeColor(device){
+    console.log(this.currentDevice.color)
+    this.appService.updateDeviceControl(device.deviceId, { color: this.currentDevice.color }).subscribe(
+      () => {
+      },
+      (err) => {
+        err = err.error
+        this.toastr.error(err.message)
+      });
+    
   }
 }

@@ -32,6 +32,16 @@ export class AppService {
     return this.http.put(url, updateBody)
   }
 
+  getDeviceControl(deviceId){
+    let url = environment.homeAutomationApi + 'api/device-control/' + deviceId;
+    return this.http.get(url)
+  }
+
+  updateDeviceControl(deviceId, updateBody){
+    let url = environment.homeAutomationApi + 'api/device-control/' + deviceId;
+    return this.http.put(url, updateBody)
+  }
+
   deleteDevice(deviceId){
     let url = environment.homeAutomationApi + 'api/device/' + deviceId;
     return this.http.delete(url)

@@ -26,12 +26,6 @@
           <li class="list-group-item" *ngFor="let device of devices">
             <i [class]="device.icon"></i>
             {{device.deviceName}}
-            <span class="pull-right">
-              <label class="pull-right" class="switch">
-                <input type="checkbox" [checked]="device.isTurnOn" (change)="toggleDeviceConnection(device)">
-                <span class="slider round"></span>
-              </label>
-            </span>
             <span style="padding-right: 10px;" class="pull-right" >
             <a (click)="openSettingModal(settingsModal, device)"><i class="fa fa-pencil"></i></a>
             </span>
@@ -118,31 +112,28 @@
     <form>
       <div class="form-group">
         <label for="power-control" style="padding-right: 5px;">Power control </label>
-        <a><i class="fa fa-power-off"></i></a>
+        <a *ngIf="currentDevice.isTurnOn" style="color: green;" (click)="toggleDeviceConnection(currentDevice)"><i class="fa fa-power-off"></i></a>
+        <a *ngIf="!currentDevice.isTurnOn" style="color: red;" (click)="toggleDeviceConnection(currentDevice)"><i class="fa fa-power-off"></i></a>
       </div>
       <div class="form-group" *ngIf="currentDevice.deviceType == 'HEADPHONE' || currentDevice.deviceType == 'TV'">
         <ul class="list-inline">
           <li class="list-inline-item"><label for="volume-control">Volume control </label></li>
           <li class="list-inline-item">
-            <a><i class="fa fa-volume-up"></i></a>
+            <a (click)="volumeControl(currentDevice, 1)"><i class="fa fa-volume-up"></i></a>
           </li>
           <li class="list-inline-item">
-            <a><i class="fa fa-volume-down"></i></a>
+            <a (click)="volumeControl(currentDevice, -1)"><i class="fa fa-volume-down"></i></a>
           </li>
         </ul>
       </div>
       <div class="form-group" *ngIf="currentDevice.deviceType == 'HEADPHONE' || currentDevice.deviceType == 'TV'">
-        <label for="volume-control" style="padding-right: 5px;">Volume mute/unmute </label>
-        <a><i class="fa fa-volume-off"></i></a>
+        <label for="volume-control" style="padding-right: 5px;">Volume Mute </label>
+        <a (click)="volumeControl(currentDevice, 0)"><i class="fa fa-volume-off"></i></a>
       </div>
       <div class="form-group" *ngIf="currentDevice.deviceType == 'LIGHT'">
         <label for="volume-control" style="padding-right: 5px;">Color mode </label>
-        <!-- <input [(colorPicker)]="color" [style.background]="color"/> -->
-        <a [(colorPicker)]="color"><i class="fa fa-paint-brush"></i></a>
+        <input [disabled] = "!currentDevice.isTurnOn" style="border-radius: 50%; width: 30px;" (colorPickerChange)="changeColor(currentDevice)" [(colorPicker)]="currentDevice.color" [style.background]="currentDevice.color">
       </div>
-      <!-- <button type="submit" class="btn btn-primary pull-right" (click)="editDevice()">Edit Device</button>
-      <button type="submit" class="btn btn-danger " (click)="removeDevice()">Remove Device</button>  -->
-      
     </form>
   </div>
 </ng-template>
