@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "home-automation-client": {
+    "Comment-App": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,18 +13,20 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/home-automation-client",
+            "outputPath": "dist/Comment-App",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
+            "aot": false,
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
@@ -41,6 +43,7 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -62,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "home-automation-client:build"
+            "browserTarget": "Comment-App:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "home-automation-client:build:production"
+              "browserTarget": "Comment-App:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "home-automation-client:build"
+            "browserTarget": "Comment-App:build"
           }
         },
         "test": {
@@ -88,9 +91,13 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.js"
+            ]
           }
         },
         "lint": {
@@ -110,15 +117,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "home-automation-client:serve"
+            "devServerTarget": "Comment-App:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "home-automation-client:serve:production"
+              "devServerTarget": "Comment-App:serve:production"
             }
           }
         }
       }
-    }},
-  "defaultProject": "home-automation-client"
+    }
+  },
+  "defaultProject": "Comment-App"
 }

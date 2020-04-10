@@ -1,0 +1,106 @@
+<div class="container">
+  <nav class="navbar navbar-light bg-light">
+    <div class="navbar-header">
+      <a class="navbar-brand">My Devices</a>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a><span class="glyphicon glyphicon-user"></span> Welcome {{user.name}}</a></li>
+      <li (click)="logout()"><a><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>All Devices</h3>
+      </div>
+      <div class="col-md-6">
+        <button (click)="openAddDeviceModal(addDeviceTemplate)" class="btn btn-default pull-right">
+          <i class="fa fa-plus"></i> Add new Device
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let device of devices">
+            <i [class]="device.icon"></i>
+            {{device.deviceName}}
+            <span class="badge">
+              <!-- Default checked -->
+              <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" [checked]="device.isTurnOn"
+                  (change)="toggleDeviceConnection(device)">
+              </div>
+            </span>
+            <span class="badge">
+              <!-- Default checked -->
+              <a (click)="openSettingModal(settingsModal, device)"><i class="fa fa-cog"></i></a>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #addDeviceTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      Add new device</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="devices">Choose a device:</label>
+        <select class="form-control" id="devices" name="devices" [(ngModel)]="newDeviceType">
+          <option *ngFor="let item of allowedDevices" [value] = "item">{{item}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="deviceName">Device Name:</label>
+       <input type="text" class="form-control" name="deviceName1" [(ngModel)]="newDeviceName">
+      </div>
+      <div class="form-group">
+        <label for="deviceLocation">Current Location:</label>
+       <input type="text" class="form-control" name="deviceLocation1" [(ngModel)]="newDeviceLocation">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2" (click)="addNewDevice()">Add Device</button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #settingsModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      Device settings</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="devices">Choose a device:</label>
+        <select disabled class="form-control" id="devices" name="devices" [(ngModel)]="editedDevice.deviceType">
+          <option *ngFor="let item of allowedDevices" [value] = "item">{{item}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="deviceName">Device Name:</label>
+       <input type="text" class="form-control" name="deviceName1" [(ngModel)]="editedDevice.deviceName">
+      </div>
+      <div class="form-group">
+        <label for="deviceLocation">Current Location:</label>
+       <input type="text" class="form-control" name="deviceLocation1" [(ngModel)]="editedDevice.location">
+      </div>
+      <button type="submit" class="btn btn-primary pull-right" (click)="editDevice()">Edit Device</button>
+      <button type="submit" class="btn btn-danger " (click)="removeDevice()">Remove Device</button> 
+      
+    </form>
+  </div>
+</ng-template>
