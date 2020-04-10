@@ -19,23 +19,24 @@
         </button>
       </div>
     </div>
-
+    
     <div class="row">
       <div class="col-md-12">
         <ul class="list-group">
           <li class="list-group-item" *ngFor="let device of devices">
             <i [class]="device.icon"></i>
             {{device.deviceName}}
-            <span class="badge">
-              <!-- Default checked -->
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" [checked]="device.isTurnOn"
-                  (change)="toggleDeviceConnection(device)">
-              </div>
+            <span class="pull-right">
+              <label class="pull-right" class="switch">
+                <input type="checkbox" [checked]="device.isTurnOn" (change)="toggleDeviceConnection(device)">
+                <span class="slider round"></span>
+              </label>
             </span>
-            <span class="badge">
-              <!-- Default checked -->
-              <a (click)="openSettingModal(settingsModal, device)"><i class="fa fa-cog"></i></a>
+            <span style="padding-right: 10px;" class="pull-right" >
+            <a (click)="openSettingModal(settingsModal, device)"><i class="fa fa-pencil"></i></a>
+            </span>
+            <span style="padding-right: 10px;" class="pull-right" >
+              <a (click)="openControlModal(controlModal, device)"><i class="fa fa-cog "></i></a>
             </span>
           </li>
         </ul>
@@ -100,6 +101,47 @@
       </div>
       <button type="submit" class="btn btn-primary pull-right" (click)="editDevice()">Edit Device</button>
       <button type="submit" class="btn btn-danger " (click)="removeDevice()">Remove Device</button> 
+      
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #controlModal>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">
+      Control {{currentDevice.deviceName}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="background-image: url('../../assets/remote.jpg');">
+    <form>
+      <div class="form-group">
+        <label for="power-control" style="padding-right: 5px;">Power control </label>
+        <a><i class="fa fa-power-off"></i></a>
+      </div>
+      <div class="form-group" *ngIf="currentDevice.deviceType == 'HEADPHONE' || currentDevice.deviceType == 'TV'">
+        <ul class="list-inline">
+          <li class="list-inline-item"><label for="volume-control">Volume control </label></li>
+          <li class="list-inline-item">
+            <a><i class="fa fa-volume-up"></i></a>
+          </li>
+          <li class="list-inline-item">
+            <a><i class="fa fa-volume-down"></i></a>
+          </li>
+        </ul>
+      </div>
+      <div class="form-group" *ngIf="currentDevice.deviceType == 'HEADPHONE' || currentDevice.deviceType == 'TV'">
+        <label for="volume-control" style="padding-right: 5px;">Volume mute/unmute </label>
+        <a><i class="fa fa-volume-off"></i></a>
+      </div>
+      <div class="form-group" *ngIf="currentDevice.deviceType == 'LIGHT'">
+        <label for="volume-control" style="padding-right: 5px;">Color mode </label>
+        <!-- <input [(colorPicker)]="color" [style.background]="color"/> -->
+        <a [(colorPicker)]="color"><i class="fa fa-paint-brush"></i></a>
+      </div>
+      <!-- <button type="submit" class="btn btn-primary pull-right" (click)="editDevice()">Edit Device</button>
+      <button type="submit" class="btn btn-danger " (click)="removeDevice()">Remove Device</button>  -->
       
     </form>
   </div>

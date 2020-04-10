@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   newDeviceLocation: String;
   newDeviceType: String;
   editedDevice: any;
+  currentDevice: any;
 
   constructor(private toastr: ToastrService,
     private appService: AppService,
@@ -79,6 +80,12 @@ export class DashboardComponent implements OnInit {
   openSettingModal(template: TemplateRef<any>, device) {
     this.modalRef = this.modalService.show(template);
     this.editedDevice = {...device};
+    // this.allowedDevices.keys()
+  }
+
+  openControlModal(template: TemplateRef<any>, device) {
+    this.modalRef = this.modalService.show(template);
+    this.currentDevice = device;
     // this.allowedDevices.keys()
   }
 

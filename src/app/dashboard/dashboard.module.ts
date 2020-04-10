@@ -5,6 +5,8 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ColorPickerModule } from 'ngx-color-picker';
+
 
 
 @NgModule({
@@ -15,6 +17,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     CommonModule,
     DashboardRoutingModule,
     FormsModule,
+    ColorPickerModule,
     ModalModule.forRoot()
   ]
 })
